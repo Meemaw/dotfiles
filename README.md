@@ -4,7 +4,7 @@
 
 ```sh
 xcode-select --install
-git clone https://github.com/HermanNygaard/dotfiles.git ~/.dotfiles
+git clone git@github.com:Meemaw/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-source scripts/setup.sh
+scripts/setup.sh
 ```
