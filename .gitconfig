@@ -1,0 +1,12 @@
+[user]
+	name = Meemaw
+	email = ematej.snuderl@gmail.com
+	signingkey = B1E486E61B6F337C
+[commit]
+	gpgsign = true
+[core]
+	editor = subl -n -w
+[pull]
+	rebase = false
+[gpg]
+	program = /opt/homebrew/bin/gpg
