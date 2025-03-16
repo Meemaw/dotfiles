@@ -3,7 +3,7 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Setup OSX defaults
-$SCRIPT_DIR/osx.sh
+# $SCRIPT_DIR/osx.sh
 
 # Install Homebrew if needed
 if ! command -v brew &>/dev/null; then
@@ -13,15 +13,24 @@ fi
 brew bundle
 
 # Make zsh default shell
-chsh -s $(which zsh)
+if [ "$(basename "$SHELL")" != "zsh" ]; then
+    echo "Changing default shell to zsh"
+    chsh -s "$(which zsh)"
+fi
 
 # Install Oh-My-ZSH
-ZSH= sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh-My-ZSH"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    rm $HOME/.zshrc
+fi
 
-for file in .zprofile .zshrc .gitconfig; do
-    if [ ! -e ~/$file ]; then
-        ln -s "$SCRIPT_DIR/../$file" ~/$file
-        source ~/$file
-        echo "$file symlink created."
+find "$SCRIPT_DIR/.." -type f -name "*.symlink" | while read -r file; do
+    target="$HOME/$(basename "$file" .symlink)"
+    source=$(realpath "$file")
+
+    if [ ! -L "$target" ]; then
+        ln -s "$source" "$target"
+        echo "Symlink created: $source → $target"
     fi
 done
