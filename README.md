@@ -18,15 +18,9 @@ file into `$HOME` (e.g. `.zshrc.symlink` → `~/.zshrc`).
 
 ## iTerm2 profile
 
-[`iterm/Default.json`](iterm/Default.json) is an iTerm2 dynamic profile. Load it by
-symlinking it into iTerm's dynamic profiles directory, then it appears under
-Preferences → Profiles:
-
-```sh
-mkdir -p "$HOME/Library/Application Support/iTerm2/DynamicProfiles"
-ln -sf "$PWD/iterm/Default.json" \
-  "$HOME/Library/Application Support/iTerm2/DynamicProfiles/Default.json"
-```
+[`iterm/Default.json`](iterm/Default.json) is an iTerm2 dynamic profile.
+`setup.sh` symlinks it into iTerm's `DynamicProfiles` directory automatically, so
+it appears under Preferences → Profiles after setup.
 
 ## macOS defaults
 
