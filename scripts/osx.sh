@@ -64,4 +64,19 @@ echo "› Time Machine:"
 echo "  › Prevent Time Machine from prompting to use new hard drives as backup volume"
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
+#############################
+
+echo ""
+echo "› Trackpad:"
+echo "  › Enable secondary (right) click in the bottom-right corner"
+# TrackpadCornerSecondaryClick: 0 = off, 1 = bottom-left, 2 = bottom-right.
+# Set on both the built-in trackpad and the Magic Trackpad (Bluetooth) domains.
+for domain in com.apple.AppleMultitouchTrackpad com.apple.driver.AppleBluetoothMultitouch.trackpad; do
+	defaults write "$domain" TrackpadCornerSecondaryClick -int 2
+	defaults write "$domain" TrackpadRightClick -bool true
+done
+# Mirror the per-host global flags macOS reads at login.
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
+
 set -e
