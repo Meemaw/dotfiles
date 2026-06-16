@@ -6,9 +6,18 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
-source <(fzf --zsh)
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Optional brew-installed shell enhancements. Guard each one so a fresh shell
+# (before `brew bundle` has run) still loads cleanly instead of erroring out.
+command -v fzf &>/dev/null && source <(fzf --zsh)
+
+if command -v brew &>/dev/null; then
+  BREW_PREFIX="$(brew --prefix)"
+  [ -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && \
+    source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  [ -f "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+    source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
 
 # Aliases
 alias ll="eza -bghHliSU"
