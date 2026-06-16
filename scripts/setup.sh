@@ -50,3 +50,14 @@ find "$SCRIPT_DIR/.." -type f -name "*.symlink" | while read -r file; do
         echo "Symlink created: $source → $target"
     fi
 done
+
+# Link the iTerm2 dynamic profile into iTerm's DynamicProfiles directory so it
+# shows up under Preferences → Profiles. It lives outside $HOME, so it isn't
+# handled by the *.symlink loop above.
+iterm_profiles_dir="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+iterm_target="$iterm_profiles_dir/Default.json"
+if [ ! -L "$iterm_target" ]; then
+    mkdir -p "$iterm_profiles_dir"
+    ln -s "$(realpath "$SCRIPT_DIR/../iterm/Default.json")" "$iterm_target"
+    echo "Symlink created: iterm/Default.json → $iterm_target"
+fi
