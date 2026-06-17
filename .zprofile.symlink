@@ -1,4 +1,7 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# rustup is keg-only; put its shims (cargo, rustc, ...) on PATH
+export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
+
 export NVM_DIR="$HOME/.nvm"
 source $(brew --prefix nvm)/nvm.sh

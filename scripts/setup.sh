@@ -1,6 +1,7 @@
 #!/bin/sh
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+BREWFILE="$SCRIPT_DIR/../Brewfile"
 
 # Setup OSX defaults
 # $SCRIPT_DIR/osx.sh
@@ -21,7 +22,17 @@ if ! command -v brew &>/dev/null; then
     fi
 fi
 
-brew bundle --file="$SCRIPT_DIR/../Brewfile"
+# Corepack provides package-manager shims such as pnpm, pnpx, yarn, and
+# yarnpkg. Remove the standalone pnpm formula before bundling so Homebrew can
+# link Corepack cleanly on machines that previously used brew-installed pnpm.
+if grep -q '^brew "corepack"' "$BREWFILE" && ! grep -q '^brew "pnpm"' "$BREWFILE"; then
+    if brew list --formula pnpm >/dev/null 2>&1; then
+        echo "Removing standalone pnpm so Corepack can own package-manager shims"
+        brew uninstall pnpm
+    fi
+fi
+
+brew bundle --file="$BREWFILE"
 
 # Make zsh default shell
 if [ "$(basename "$SHELL")" != "zsh" ]; then
